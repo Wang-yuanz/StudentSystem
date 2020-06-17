@@ -1,0 +1,104 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.examSys.dao.ExamPaperDao">
+	<insert id="add" parameterType="org.examSys.pojo.ExamPaper" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+		insert into exampaper(name,createDate) values(#{name},getDate())
+	</insert>
+	
+	<!-- 添加试卷的组成部分 -->
+	<insert id="addParts" parameterType="org.examSys.pojo.ExamPaperParts" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+		insert into examPaperParts  (partName,quesCount,disOrder,exampaper_id,grade_id,difficulty_id,board_id,questiontype_id)
+			values(#{partName},#{quesCount},#{disOrder},#{examPaper_id},#{grade_id},#{difficulty_id},#{board_id},#{questionType_id})
+	</insert>
+	
+	<!-- 添加试卷试题 -->
+	<insert id="addPaperQuestion">
+		insert into examPaperPartsQuestion(part_id,question_id,disOrder)
+			values(#{partId},#{quesId},1)
+	</insert>
+	
+	<!-- 根据策略返回满足条件的试题编号 -->
+	<select id="getQuestions" resultType="Integer">
+		select top(#{quesCount}) id from question
+		<where>
+			<if test="gradeId != null and gradeId != -1">and grade_id = #{gradeId}</if>
+			<if test="difficultyId != null and difficultyId != -1">and difficulty_Id = #{difficultyId}</if>
+			<if test="boardId != null and boardId != -1">and board_Id = #{boardId}</if>
+			<if test="questionTypeId != null and questionTypeId != -1">and questionType_Id = #{questionTypeId}</if>
+		</where>
+	</select>
+	
+	<delete id="deleteById" parameterType="int">
+		<!-- 删除试卷之前得先删除 试卷试题和试卷组成部分 -->
+		delete from examPaperPartsQuestion where part_id in(select id from examPaperParts where exampaper_id = #{id});
+		delete from exampaperparts where examPaper_id = #{id};
+		delete from exampaper where id = #{id}
+	</delete>
+	
+	<delete id="deleteByIds" parameterType="java.lang.reflect.Array">
+		delete from examPaperPartsQuestion where part_id in(select id from examPaperParts where exampaper_id in 
+		<foreach collection="array" item="item" open="(" close=")" separator=",">
+			#{item}
+		</foreach>
+		);
+		delete from exampaperparts where examPaper_id in 
+		<foreach collection="array" item="item" open="(" close=")" separator=",">
+			#{item}
+		</foreach>
+		;
+		delete from exampaper where id in
+		<foreach collection="array" item="item" open="(" close=")" separator=",">
+			#{item}
+		</foreach>
+	</delete>
+	
+	<!-- 构造条件 -->
+	<sql id="conditionSql">
+		<if test="condition != null">
+			<if test="condition.name != null and condition.name != ''">
+				and name like concat('%',#{condition.name},'%')
+			</if>
+		</if>
+	</sql>
+	<resultMap type="org.examSys.pojo.ExamPaper" id="paperMap" autoMapping="true">
+		<id column="id" property="id"/>
+		<collection property="examPaperPartsList" javaType="java.util.List" ofType="org.examSys.pojo.ExamPaperParts" column="id" select="getPartsByPaperId"></collection>
+	</resultMap>
+	
+	<!-- 根据编号查询试卷信息 -->
+	<select id="getById" parameterType="int" resultMap="paperMap">
+		select * from exampaper where id = #{id}
+	</select>
+	
+	<!-- 根据组成部分名称获取试题 -->
+	<select id="getQuestionsByPartName" parameterType="java.lang.String" resultMap="helloMap">
+		select * from question where id in (select a.question_id from examPaperPartsQuestion a inner join examPaperParts b on a.part_id = b.id where b.partName = #{name})
+	</select>
+	
+	<resultMap type="org.examSys.pojo.Question" id="helloMap" autoMapping="true">
+		<id column="id" property="id"/>
+		<collection property="optionsList" ofType="org.examSys.pojo.Options" javaType="java.util.List" column="id" select="helloSelect"></collection>
+	</resultMap>
+	
+	<select id="helloSelect" parameterType="int" resultType="org.examSys.pojo.Options">
+		select * from options where question_id = #{id}
+	</select>
+	<!-- 根据试卷编号查看试卷组成部分信息 -->
+	<select id="getPartsByPaperId" parameterType="int" resultType="org.examSys.pojo.ExamPaperParts">
+		select partName,sum(quesCount) as quesCount from examPaperParts where exampaper_id = #{id}
+			group by partName
+	</select>
+	
+	<select id="getListByCondition" resultMap="paperMap">
+		select top (#{limit}) id,name from exampaper where id not in (select top (#{start}) id from exampaper <where><include refid="conditionSql"></include></where>)
+		<!-- 此处添加查询条件 -->
+		<include refid="conditionSql"></include>
+	</select>
+	
+	<select id="getCountByCondition" resultType="int">
+		select count(1) from exampaper
+		<!-- 此处添加查询条件 -->
+		<where><include refid="conditionSql"></include></where>
+	</select>
+	
+</mapper>

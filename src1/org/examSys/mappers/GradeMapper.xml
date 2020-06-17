@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.examSys.dao.GradeDao">
+	<insert id="add" parameterType="Grade" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+		insert into grade(name) values(#{name})
+	</insert>
+	
+	<delete id="deleteById" parameterType="int">
+		delete from grade where id = #{id}
+	</delete>  
+	
+	<delete id="deleteByIds" parameterType="java.lang.reflect.Array">
+		delete from grade where id in
+		<foreach collection="array" item="item" open="(" close=")" separator=",">
+			#{item}
+		</foreach>
+	</delete>
+	
+	<update id="update" parameterType="Grade">
+		update grade set name = #{name} where id = #{id}
+	</update>
+	
+	<select id="getById" parameterType="int" resultType="Grade">
+		select id,name from grade where id = #{id}
+	</select>
+	
+	
+	<select id="getAll" resultType="org.examSys.pojo.Grade">
+		select id, name from grade 
+	</select>
+	
+	<select id="getList" resultType="Grade">
+		select top (#{limit}) id,name from grade where id not in (select top (#{start}) id from grade)
+	</select>
+	
+	<select id="getCount" resultType="int">
+		select count(1) from grade
+	</select>
+	
+	<!-- 构造条件 -->
+	<sql id="conditionSql">
+		<if test="condition != null">
+			<if test="condition.name != null and condition.name != ''">
+				and name like concat('%',#{condition.name},'%')
+			</if>
+		</if>
+	</sql>
+	
+	<select id="getListByCondition" resultType="Grade">
+		select top (#{limit}) id,name from grade where id not in (select top (#{start}) id from grade <where><include refid="conditionSql"></include></where>)
+		<!-- 此处添加查询条件 -->
+		<include refid="conditionSql"></include>
+	</select>
+	
+	<select id="getCountByCondition" resultType="int">
+		select count(1) from grade
+		<!-- 此处添加查询条件 -->
+		<where><include refid="conditionSql"></include></where>
+	</select>
+	
+</mapper>
+
+
+
+
+
+
+
+
+
+

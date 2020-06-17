@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.examSys.dao.QuestionTypeDao">
+	<insert id="add" parameterType="QuestionType" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+		insert into questionType(name) values(#{name})
+	</insert>
+	
+	<delete id="deleteById" parameterType="int">
+		delete from questionType where id = #{id}
+	</delete>
+	  
+	<delete id="deleteByIds" parameterType="java.lang.reflect.Array">
+		delete from questionType where id in
+		<foreach collection="array" item="item" open="(" close=")" separator=",">
+			#{item}
+		</foreach>
+	</delete>
+	
+	<update id="update" parameterType="QuestionType">
+		update questionType set name = #{name} where id = #{id}
+	</update>
+	
+	<select id="getById" parameterType="int" resultType="QuestionType">
+		select id,name from questionType where id = #{id}
+	</select>
+	
+	
+	<select id="getAll" resultType="org.examSys.pojo.QuestionType">
+		select id, name from questionType 
+	</select>
+	
+	<select id="getList" resultType="QuestionType">
+		select top (#{limit}) id,name from questionType where id not in (select top (#{start}) id from questionType)
+	</select>
+	
+	<select id="getCount" resultType="int">
+		select count(1) from questionType
+	</select>
+	
+	<!-- 构造条件 -->
+	<sql id="conditionSql">
+		<if test="condition != null">
+			<if test="condition.name != null and condition.name != ''">
+				and name like concat('%',#{condition.name},'%')
+			</if>
+		</if>
+	</sql>
+	
+	<select id="getListByCondition" resultType="QuestionType">
+		select top (#{limit}) id,name from questionType where id not in (select top (#{start}) id from questionType <where><include refid="conditionSql"></include></where>)
+		<!-- 此处添加查询条件 -->
+		<include refid="conditionSql"></include>
+	</select>
+	
+	<select id="getCountByCondition" resultType="int">
+		select count(1) from questionType
+		<!-- 此处添加查询条件 -->
+		<where><include refid="conditionSql"></include></where>
+	</select>
+	
+</mapper>
+
+
+
+
+
+
+
+
+
+
