@@ -1,0 +1,65 @@
+@font-face { font-family: 'icomoon';  src: url("../fonts/icomoon.eot?4xwuf3"); src: url("../fonts/icomoon.eot?4xwuf3#iefix") format("embedded-opentype"), url("../fonts/icomoon.ttf?4xwuf3") format("truetype"), url("../fonts/icomoon.woff?4xwuf3") format("woff"), url("../fonts/icomoon.svg?4xwuf3#icomoon") format("svg"); font-weight: normal; font-style: normal; }
+[class^="icon-"], [class*=" icon-"] { font-family: 'icomoon' !important; padding-left: 1.25rem; padding-top: 0; padding-right: 1.25rem; padding-bottom: 0; }
+
+.icon-logo:before { content: "\e80e"; }
+
+html, body { font-family: "Dosis " Helvetica Neue ",Helvetica,Arial," Hiragino Sans GB "," Hiragino Sans GB W3 "," WenQuanYi Micro Hei ",sans-serif;"; color: #343434; font-size: 1rem; min-width: 320px; }
+
+ul { padding: 0; margin: 0; list-style: none; }
+
+.bg-white { background-color: #fff; }
+
+.sd-bottom { box-shadow: 5px 1px  5px 1px #ddd; }
+
+.navbar { min-height: 40px; height: 40px; padding-left: 0; padding-top: 0.5rem; padding-right: 0; padding-bottom: 0.5rem; }
+
+.navbar-brand, a.navbar-brand:hover { color: #343434; }
+
+.navbar-toggler:hover, .navbar-toggler :active, .navbar-toggler :focus { outline: none; cursor: pointer; background-color: #343434; color: #fff; }
+
+.navbar-toggleable-md .navbar-nav .nav-link { display: inline-block; height: 40px; line-height: 40px; color: #343434; padding-left: 1.5rem; padding-top: 0; padding-right: 1.5rem; padding-bottom: 0; }
+.navbar-toggleable-md .navbar-nav .nav-link:hover { background-color: #343434; color: #fff; }
+
+.backlay { background-image: url(/assets/imgs/bg2.jpg); background-size: cover; position: fixed; top: 0; left: 0; bottom: 0; width: 100%; }
+
+.login-box {border-radius:5px; box-sizing: border-box; background: white; margin-top: 150px; margin-left: auto; margin-right: auto; position: relative; padding: 15px; z-index: 100; }
+.login-box h3 { font-size: 2rem; margin-top: 10px; margin-bottom: 15px; color: #343434; }
+.login-box .form-group:last-child { margin-bottom: 0; }
+
+#content { padding-top: 1.25rem; margin-bottom: 1.25rem; }
+
+.card { background: #fff; box-shadow: 1px 1px  5px 1px #ddd; border-radius: 0; margin-bottom: 1.25rem; }
+
+.card .card-header { background: #fff; color: #575d6c; font-weight: bolder; /*border-bottom-color: #575d6c;*/ border-radius: 0; font-size: 1.4rem; }
+
+.card-img { background: url("../imgs/aaa.png"); background-size: cover; padding: 2rem 0; text-align: center; }
+
+.card img.avator { width: 8rem; /*background: #fff;*/ padding: 3px; border: 1px solid #575D6C; }
+
+.timer { /*float: left;*/ display: inline-block; width: 40px; /*height: 40px;*/ background-color: #575D6C; color: #fff; font-size: 24px; /*font-family: Arial;*/ font-weight: 700; /*border-radius: 2px;*/ text-align: center; /*line-height: 40px*/ }
+
+.timer_split { display: inline-block; padding-top: 10px; padding-left: 5px; padding-right: 5px; background-color: #575D6C; }
+
+.timer_split i { display: block; width: 3px; height: 3px; margin: 5px 1px; background: #fff; }
+
+.copyrights { padding: .5rem; font-size: 0.8rem; }
+
+#paper .question { border: 1px solid #ddd; padding: 1.25rem; border-bottom: none; }
+
+#paper .question:last-child { border-bottom: 1px solid #ddd; }
+
+#paper .question-title { font-weight: bold; font-size: 1.1rem; border-bottom: 1px dotted #ddd; }
+
+#paper .question-title i { font-style: normal; padding-right: 1rem; font-size: 2rem; }
+
+#paper .question-block { padding: 1.25rem 0; border-bottom: 1px dotted #ddd; }
+
+#paper .question-answers { padding-top: 1.25rem; }
+
+#paper .question-block li { line-height: 2rem; }
+
+#paper .question-answers input[type="checkbox"] { margin-right: 1.25rem; }
+
+#paper .form-check { margin-right: 1.25rem; display: inline-block; margin-bottom: 0; }
+
+/**/
