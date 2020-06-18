@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.alvis.exam.repository.QuestionMapper">
+  <resultMap id="BaseResultMap" type="com.alvis.exam.domain.Question">
+  <id column="id" jdbcType="INTEGER" property="id" />
+  <result column="question_type" jdbcType="INTEGER" property="questionType" />
+  <result column="score" jdbcType="INTEGER" property="score" />
+  <result column="difficult" jdbcType="INTEGER" property="difficult" />
+  <result column="info_text_content_id" jdbcType="INTEGER" property="infoTextContentId" />
+  <result column="create_user" jdbcType="INTEGER" property="createUser" />
+  <result column="status" jdbcType="INTEGER" property="status" />
+  <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  <result column="deleted" jdbcType="BIT" property="deleted" />
+  <result column="correct" jdbcType="VARCHAR" property="correct" />
+  <collection property="capterQuestions" ofType="com.alvis.exam.domain.CapterQuestion">
+    <id column="id"  property="id" />
+    <id column="capter_id"  property="capterId" />
+    <id column="question_id"  property="questionId" />
+  </collection>
+</resultMap>
+
+
+  <sql id="Base_Column_List">
+    id, question_type, score,difficult, correct, info_text_content_id,
+    create_user, status, create_time, deleted
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select a.*,b.capter_id,b.question_id
+    from t_question a join t_capter_question b on a.id = b.question_id
+    where a.id = #{id}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_question
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyProperty="id" parameterType="com.alvis.exam.domain.Question" useGeneratedKeys="true">
+    /*开启主键回写*/
+    insert into t_question (id, question_type,
+      score,difficult,
+      correct, info_text_content_id, create_user,
+      status, create_time, deleted
+      )
+    values (#{id,jdbcType=INTEGER}, #{questionType,jdbcType=INTEGER},
+      #{score,jdbcType=INTEGER}, #{difficult,jdbcType=INTEGER},
+      #{correct,jdbcType=VARCHAR}, #{infoTextContentId,jdbcType=INTEGER}, #{createUser,jdbcType=INTEGER},
+      #{status,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{deleted,jdbcType=BIT}
+      )
+  </insert>
+
+  <insert id="insertBatch" keyProperty="id" parameterType="java.util.List" useGeneratedKeys="true">
+    insert into t_question (id, question_type,
+    score,difficult,
+    correct, info_text_content_id, create_user,
+    status, create_time, deleted
+    )
+    values
+    <foreach collection="list" item="item" index="index" separator=",">
+      (
+      #{item.id,jdbcType=INTEGER}, #{item.questionType,jdbcType=INTEGER},
+      #{item.score,jdbcType=INTEGER}, #{item.difficult,jdbcType=INTEGER},
+      #{item.correct,jdbcType=VARCHAR}, #{item.infoTextContentId,jdbcType=INTEGER}, #{item.createUser,jdbcType=INTEGER},
+      #{item.status,jdbcType=INTEGER}, #{item.createTime,jdbcType=TIMESTAMP}, #{item.deleted,jdbcType=BIT}
+      )
+    </foreach>
+  </insert>
+  <insert id="insertSelective" keyProperty="id" parameterType="com.alvis.exam.domain.Question" useGeneratedKeys="true">
+    insert into t_question
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="questionType != null">
+        question_type,
+      </if>
+      <if test="score != null">
+        score,
+      </if>
+      <if test="difficult != null">
+        difficult,
+      </if>
+      <if test="correct != null">
+        correct,
+      </if>
+      <if test="infoTextContentId != null">
+        info_text_content_id,
+      </if>
+      <if test="createUser != null">
+        create_user,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="deleted != null">
+        deleted,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="questionType != null">
+        #{questionType,jdbcType=INTEGER},
+      </if>
+
+      <if test="score != null">
+        #{score,jdbcType=INTEGER},
+      </if>
+
+      <if test="difficult != null">
+        #{difficult,jdbcType=INTEGER},
+      </if>
+      <if test="correct != null">
+        #{correct,jdbcType=VARCHAR},
+      </if>
+      <if test="infoTextContentId != null">
+        #{infoTextContentId,jdbcType=INTEGER},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleted != null">
+        #{deleted,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.alvis.exam.domain.Question">
+    update t_question
+    <set>
+      <if test="questionType != null">
+        question_type = #{questionType,jdbcType=INTEGER},
+      </if>
+      <if test="score != null">
+        score = #{score,jdbcType=INTEGER},
+      </if>
+      <if test="difficult != null">
+        difficult = #{difficult,jdbcType=INTEGER},
+      </if>
+      <if test="correct != null">
+        correct = #{correct,jdbcType=VARCHAR},
+      </if>
+      <if test="infoTextContentId != null">
+        info_text_content_id = #{infoTextContentId,jdbcType=INTEGER},
+      </if>
+      <if test="createUser != null">
+        create_user = #{createUser,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleted != null">
+        deleted = #{deleted,jdbcType=BIT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.alvis.exam.domain.Question">
+    update t_question
+    set question_type = #{questionType,jdbcType=INTEGER},
+      score = #{score,jdbcType=INTEGER},
+      difficult = #{difficult,jdbcType=INTEGER},
+      correct = #{correct,jdbcType=VARCHAR},
+      info_text_content_id = #{infoTextContentId,jdbcType=INTEGER},
+      create_user = #{createUser,jdbcType=INTEGER},
+      status = #{status,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      deleted = #{deleted,jdbcType=BIT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+
+
+
+  <select id="page" parameterType="com.alvis.exam.viewmodel.admin.question.QuestionPageRequestVM" resultMap="BaseResultMap">
+    SELECT
+    a.*,c.capter_id,c.question_id
+    FROM t_question a left join  t_text_content b on  a.info_text_content_id=b.id join exam.t_capter_question c on c.question_id=a.id join t_capter d on c.capter_id=d.id
+    <where>
+        and a.deleted=0
+      <if test="id != null ">
+        and a.id= #{id}
+      </if>
+      <if test="questionTitle != null ">
+        and b.content like #{questionTitle}
+      </if>
+      <if test="capterId != null ">
+        and c.capter_id= #{capterId}
+      </if>
+      <if test="questionType != null ">
+        and question_type= #{questionType}
+      </if>
+    </where>
+  </select>
+
+
+
+  <select id="selectByIds" resultMap="BaseResultMap">
+    select a.*,b.capter_id,b.question_id
+    FROM t_question a join t_capter_question b on a.id = b.question_id where a.id in
+    <foreach close=")" collection="ids" item="id" open="(" separator=",">
+      #{id}
+    </foreach>
+  </select>
+
+
+  <select id="selectAllCount" resultType="java.lang.Integer">
+		SELECT count(*) from t_question where  deleted=0
+	</select>
+
+  <select id="selectCountByDate" resultType="com.alvis.exam.domain.other.KeyValue">
+		SELECT create_time as name,COUNT(create_time) as value from
+		        (
+				  SELECT DATE_FORMAT(create_time,'%Y-%m-%d') as create_time from t_question
+					WHERE  deleted=0  and  create_time  between  #{startTime}  and  #{endTime}
+				) a
+		GROUP BY create_time
+	</select>
+  <select id="getQuestionPerTypeNum" resultType="com.alvis.exam.viewmodel.admin.question.QuestionPerTypeNumVM">
+    select question_type as questionType,count(1) as num from t_question  where t_question.deleted=0 group by question_type
+  </select>
+  <select id="getQuestionNumByCapterIdAndDiffcultAndQuestionType" resultType="com.alvis.exam.domain.Question">
+    select distinct a.id,a.score from  t_question a join t_capter_question b on a.id=b.question_id
+    where a.question_type=#{questionType} and (a.difficult between #{difficultStart} AND #{difficultEnd})
+    and b.capter_id in
+    <foreach close=")" collection="capterIdList" item="id" open="(" separator=",">
+      #{id}
+    </foreach>
+  </select>
+  <select id="countQuestionInPaperQuestionNum" resultType="java.lang.Integer">
+    select  count(1) from t_paper_question a join t_exam_paper b on a.paper_id=b.id where question_id=#{id} and b.deleted=0
+    <if test="startTime!=null and startTime!='' ">
+    and b.create_time &gt;= #{startTime}
+  </if>
+    <if test="endTime!=null and endTime!=''">
+      and b.create_time &lt;=#{endTime}
+    </if>
+  </select>
+
+</mapper>

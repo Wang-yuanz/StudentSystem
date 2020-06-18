@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.alvis.exam.repository.PaperQuestionMapper">
+  <resultMap id="BaseResultMap" type="com.alvis.exam.domain.PaperQuestion">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="paper_id" jdbcType="INTEGER" property="paperId" />
+    <result column="question_id" jdbcType="INTEGER" property="questionId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="updateTime" jdbcType="TIMESTAMP" property="updatetime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, paper_id, question_id, create_time, updateTime
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_paper_question
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_paper_question
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.alvis.exam.domain.PaperQuestion">
+    insert into t_paper_question (id, paper_id, question_id, 
+      create_time, updateTime)
+    values (#{id,jdbcType=INTEGER}, #{paperId,jdbcType=INTEGER}, #{questionId,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updatetime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.alvis.exam.domain.PaperQuestion">
+    insert into t_paper_question
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="paperId != null">
+        paper_id,
+      </if>
+      <if test="questionId != null">
+        question_id,
+      </if>
+        create_time,
+      <if test="updatetime != null">
+        updateTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="paperId != null">
+        #{paperId,jdbcType=INTEGER},
+      </if>
+      <if test="questionId != null">
+        #{questionId,jdbcType=INTEGER},
+      </if>
+       now(),
+      <if test="updatetime != null">
+        #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.alvis.exam.domain.PaperQuestion">
+    update t_paper_question
+    <set>
+      <if test="paperId != null">
+        paper_id = #{paperId,jdbcType=INTEGER},
+      </if>
+      <if test="questionId != null">
+        question_id = #{questionId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatetime != null">
+        updateTime = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.alvis.exam.domain.PaperQuestion">
+    update t_paper_question
+    set paper_id = #{paperId,jdbcType=INTEGER},
+      question_id = #{questionId,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      updateTime = #{updatetime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <delete id="clearPaperQuestion">
+    delete from t_paper_question where paper_id=#{paperId}
+  </delete>
+</mapper>
